@@ -1,4 +1,27 @@
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from './lib/supabase'
+
 export default function Home() {
+  const router = useRouter()
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) router.push('/dashboard')
+    })
+  }, [router])
+
+  const handleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: 'http://localhost:3000'
+      }
+    })
+  }
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-white px-6 py-16 gap-10">
 
@@ -51,6 +74,7 @@ export default function Home() {
       {/* Buttons */}
       <div className="flex gap-3 flex-wrap justify-center">
         <button
+          onClick={handleLogin}
           className="text-white rounded-full px-9 py-4 text-base font-medium transition-all hover:opacity-90 active:scale-95"
           style={{ background: '#3C3489' }}>
           Start planning →
