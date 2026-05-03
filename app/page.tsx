@@ -14,11 +14,12 @@ export default function Home() {
   }, [router])
 
   const handleLogin = async () => {
+    const origin = window.location.origin
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:3000'
-      }
+        redirectTo: `${origin}/auth/callback?next=/dashboard`,
+      },
     })
   }
 
