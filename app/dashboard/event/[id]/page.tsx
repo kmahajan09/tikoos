@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { supabase } from '../../../lib/supabase'
+import ChecklistTab from './ChecklistTab'
+
 
 const TABS = ['Overview', 'Decor', 'Catering', 'DJ', 'Virtual Lounge', 'Checklist']
 
@@ -146,13 +148,11 @@ export default function EventPage() {
           </div>
         )}
 
+
         {activeTab === 'Checklist' && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="text-4xl">✅</div>
-            <p className="text-lg font-medium" style={{ color: '#2C2C2A' }}>Checklist</p>
-            <p className="text-sm" style={{ color: '#888780' }}>Master checklist — coming soon</p>
-          </div>
+          <ChecklistTab eventId={id as string} />
         )}
+
 
       </div>
     </main>
