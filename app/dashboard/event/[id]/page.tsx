@@ -4,20 +4,26 @@ import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { supabase } from '../../../lib/supabase'
 import ChecklistTab from './ChecklistTab'
+import VirtualLoungeTab from './VirtualLoungeTab'
+import InvitesTab from './InvitesTab'
 
 
-const TABS = ['Overview', 'Decor', 'Catering', 'DJ', 'Virtual Lounge', 'Checklist']
+const TABS = ['Overview', 'Invites', 'Decor', 'Catering', 'DJ', 'Virtual Lounge', 'Checklist']
+
+
 
 export default function EventPage() {
   const router = useRouter()
   const { id } = useParams()
   const [event, setEvent] = useState<any>(null)
+  const [user, setUser] = useState<any>(null)
   const [activeTab, setActiveTab] = useState('Overview')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) { router.push('/'); return }
+      setUser(session.user)
       fetchEvent()
     })
   }, [id])
@@ -98,7 +104,6 @@ export default function EventPage() {
                 { label: 'Guests', value: event.guest_count || '0' },
                 { label: 'Theme', value: event.theme },
                 { label: 'Timezone', value: event.timezone },
-                { label: 'Currency', value: event.currency },
               ].map((item) => (
                 <div key={item.label} className="p-5 rounded-2xl border"
                   style={{ borderColor: '#D3D1C7' }}>
@@ -141,16 +146,20 @@ export default function EventPage() {
         )}
 
         {activeTab === 'Virtual Lounge' && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="text-4xl">🌐</div>
-            <p className="text-lg font-medium" style={{ color: '#2C2C2A' }}>Virtual Lounge</p>
-            <p className="text-sm" style={{ color: '#888780' }}>Messages and polls for remote guests — coming soon</p>
-          </div>
+          <VirtualLoungeTab
+            eventId={id as string}
+            user={user}
+            isHost={event.created_by === user?.id}
+            loungePrivacy={event.lounge_privacy || 'public'}
+          />
         )}
-
 
         {activeTab === 'Checklist' && (
           <ChecklistTab eventId={id as string} />
+        )}
+
+        {activeTab === 'Invites' && (
+          <InvitesTab eventId={id as string} eventTitle={event.title} />
         )}
 
 

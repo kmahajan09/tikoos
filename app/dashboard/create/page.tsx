@@ -17,6 +17,7 @@ export default function CreateEvent() {
     theme: 'Garden Enchantment',
     timezone: 'America/New_York',
     notes: '',
+    lounge_privacy: 'public',
   })
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export default function CreateEvent() {
       theme: form.theme,
       timezone: form.timezone,
       notes: form.notes,
+      lounge_privacy: form.lounge_privacy,
       created_by: userId,
     })
 
@@ -126,6 +128,33 @@ export default function CreateEvent() {
             <option value="America/Vancouver">Vancouver (PT)</option>
             <option value="Asia/Kolkata">India (IST)</option>
           </select>
+        </div>
+
+        {/* Lounge Privacy */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium" style={{ color: '#2C2C2A' }}>
+            Virtual Lounge Privacy
+          </label>
+          <p className="text-xs" style={{ color: '#888780' }}>
+            Private mode hides guest submissions from each other — only the host sees everything.
+          </p>
+          <div className="flex gap-3">
+            {[
+              { value: 'public', label: '🌐 Public', desc: 'Everyone sees all messages and videos' },
+              { value: 'private', label: '🔒 Private', desc: 'Only host sees submissions' },
+            ].map(opt => (
+              <button key={opt.value}
+                onClick={() => setForm({ ...form, lounge_privacy: opt.value })}
+                className="flex-1 flex flex-col gap-1 p-4 rounded-xl border text-left transition-all"
+                style={{
+                  borderColor: form.lounge_privacy === opt.value ? '#3C3489' : '#D3D1C7',
+                  background: form.lounge_privacy === opt.value ? '#EEEDFE' : 'transparent',
+                }}>
+                <span className="text-sm font-medium" style={{ color: '#2C2C2A' }}>{opt.label}</span>
+                <span className="text-xs" style={{ color: '#888780' }}>{opt.desc}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Notes */}
