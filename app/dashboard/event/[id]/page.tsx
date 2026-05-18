@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
@@ -6,6 +6,7 @@ import { supabase } from '../../../lib/supabase'
 import ChecklistTab from './ChecklistTab'
 import VirtualLoungeTab from './VirtualLoungeTab'
 import InvitesTab from './InvitesTab'
+import DecorTab from './DecorTab'
 
 
 const TABS = ['Overview', 'Invites', 'Decor', 'Catering', 'DJ', 'Virtual Lounge', 'Checklist']
@@ -60,12 +61,12 @@ export default function EventPage() {
           <button onClick={() => router.push('/dashboard')}
             className="text-sm px-4 py-2 rounded-full border transition-all hover:opacity-80"
             style={{ color: '#5F5E5A', borderColor: '#D3D1C7' }}>
-            ← Back
+            â† Back
           </button>
           <div>
             <h1 className="text-lg font-medium" style={{ color: '#2C2C2A' }}>{event.title}</h1>
             <p className="text-xs" style={{ color: '#888780' }}>
-              {event.event_date || 'Date TBD'} · {event.venue || 'Venue TBD'} · {event.guest_count} guests
+              {event.event_date || 'Date TBD'} Â· {event.venue || 'Venue TBD'} Â· {event.guest_count} guests
             </p>
           </div>
         </div>
@@ -122,13 +123,9 @@ export default function EventPage() {
         )}
 
         {activeTab === 'Decor' && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <div className="text-4xl">🎨</div>
-            <p className="text-lg font-medium" style={{ color: '#2C2C2A' }}>Decor tab</p>
-            <p className="text-sm" style={{ color: '#888780' }}>Mood board and decor notes — coming soon</p>
-          </div>
+          <DecorTab eventId={id as string} />
         )}
-
+        
         {activeTab === 'Catering' && (
           <div className="flex flex-col items-center justify-center py-24 gap-3">
             <div className="text-4xl">🍽️</div>
